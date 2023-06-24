@@ -4,14 +4,15 @@ from models.base_model import BaseModel, Base
 import os
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String
-from models.place import Place
-from models.review import Review
 
 
 class User(BaseModel):
     """This class defines a user by various attributes"""
 
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        from models.place import Place
+        from models.review import Review
+
         __tablename__ = 'users'
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)
