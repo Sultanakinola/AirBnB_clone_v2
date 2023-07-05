@@ -3,7 +3,7 @@
 import os
 import uuid
 from datetime import datetime
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, String, DateTime, Integer, func
 from sqlalchemy.ext.declarative import declarative_base
 
 if os.getenv("HBNB_TYPE_STORAGE") == 'db':
@@ -14,10 +14,10 @@ else:
 
 class BaseModel:
     """A base class for all hbnb models"""
-    id = Column(String(60), nullable=False, primary_key=True)
+    id = Column(String(60), primary_key=True, nullable=False, unique=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    
+
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
         if not kwargs:
@@ -41,10 +41,15 @@ class BaseModel:
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
         return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
 
+    def __repr__(self):
+        """ For string representation in case of print(State) """
+
+        return self.__str__()
+
     def save(self):
         """Updates updated_at with current time when instance is changed"""
         from models import storage
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.utcnow()
         storage.new(self)
         storage.save()
 

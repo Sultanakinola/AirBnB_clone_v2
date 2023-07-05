@@ -19,6 +19,7 @@ class State(BaseModel, Base):
 
     else:
         name = ""
+
         @property
         def cities(self):
             """ returns all cities with state_id == State.id """

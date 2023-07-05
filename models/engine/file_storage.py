@@ -57,6 +57,8 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
+        """ Deletes an object from the private class __objects then saves """
+
         if obj is not None:
-            del self.__objects[obj.__class__.__name__ + '.' + obj.id]
+            del self.all()[obj.to_dict()['__class__'] + '.' + obj.id]
             self.save()
